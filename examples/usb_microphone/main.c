@@ -12,18 +12,16 @@
  * https://github.com/hathach/tinyusb/tree/master/examples/device/audio_test
  */
 
-#include "pico/pdm_microphone.h"
+#include "pico/analog_microphone.h"
 
 #include "usb_microphone.h"
 
 // configuration
-const struct pdm_microphone_config config = {
-  .gpio_data = 15,
-  .gpio_clk = 3,
-  .pio = pio0,
-  .pio_sm = 0,
-  .sample_rate = SAMPLE_RATE,
-  .sample_buffer_size = SAMPLE_BUFFER_SIZE,
+const struct analog_microphone_config config = {
+    .gpio = 26,              // ADC-compatible GPIO (26-28)
+    .bias_voltage = 1.25,    // Adjust based on your mic (MAX9814 typically 1.25V)
+    .sample_rate = 48000,    // 48 kHz
+    .sample_buffer_size = 256,
 };
 
 // variables
@@ -35,10 +33,10 @@ void on_usb_microphone_tx_ready();
 
 int main(void)
 {
-  // initialize and start the PDM microphone
-  pdm_microphone_init(&config);
-  pdm_microphone_set_samples_ready_handler(on_pdm_samples_ready);
-  pdm_microphone_start();
+  // initialize and start the analog microphone
+  analog_microphone_init(&config);
+  analog_microphone_set_samples_ready_handler(on_analog_samples_ready);
+  analog_microphone_start();
 
   // initialize the USB microphone interface
   usb_microphone_init();
