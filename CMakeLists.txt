@@ -4,8 +4,10 @@ if(WIN32)
 else()
     set(USERHOME $ENV{HOME})
 endif()
-set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
-set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
+
+#commented out bc already set in terminal
+#set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
+#set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
 if(WIN32)
     set(pico-sdk-tools_DIR ${USERHOME}/.pico-sdk/tools/1.5.1)
     include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
