@@ -5,14 +5,23 @@ else()
     set(USERHOME $ENV{HOME})
 endif()
 
-#commented out bc already set in terminal
-set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
-set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
+# Use environment variable for SDK
+set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
+
 if(WIN32)
-    set(pico-sdk-tools_DIR ${USERHOME}/.pico-sdk/tools/1.5.1)
+    set(pico-sdk-tools_DIR $ENV{PICO_SDK_TOOLS})
     include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
     include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
 endif()
+
+#commented out bc doesn't point to right spot in our directory
+#set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
+#set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
+#if(WIN32)
+#    set(pico-sdk-tools_DIR ${USERHOME}/.pico-sdk/tools/1.5.1)
+#    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
+#    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
+#endif()
 # ====================================================================================
 cmake_minimum_required(VERSION 3.12)
 
