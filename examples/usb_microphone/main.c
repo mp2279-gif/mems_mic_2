@@ -59,8 +59,17 @@ void on_analog_samples_ready()
 {
     // callback from library when all the samples in the library
     // internal sample buffer are ready for reading 
-    samples_read = analog_microphone_read(sample_buffer, 256);
+    analog_microphone_read(sample_buffer, 256);
 }
+
+/*
+ *   void on_analog_samples_ready()
+*{
+ *   // callback from library when all the samples in the library
+ *   // internal sample buffer are ready for reading 
+ *   samples_read = analog_microphone_read(sample_buffer, 256);
+*}
+ */
 
 //void on_pdm_samples_ready()
 //{
