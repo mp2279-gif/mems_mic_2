@@ -8,11 +8,11 @@ endif()
 # Use environment variable for SDK
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 
-if(WIN32)
-    set(picotool_DIR $ENV{PICOTOOLREF})
-    include(${picotool_DIR}/picotoolConfig.cmake)
-    include(${picotool_DIR}/picotoolConfigVersion.cmake)
-endif()
+#if(WIN32)
+#    set(picotool_DIR $ENV{PICOTOOLREF})
+#    include(${picotool_DIR}/picotoolConfig.cmake)
+#    include(${picotool_DIR}/picotoolConfigVersion.cmake)
+#endif()
 
 #commented out; will just picotool.exe directly instead of pico-sdk-tools 
 #if(WIN32)
