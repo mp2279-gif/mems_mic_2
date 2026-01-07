@@ -9,10 +9,17 @@ endif()
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 
 if(WIN32)
-    set(pico-sdk-tools_DIR $ENV{PICO_SDK_TOOLS})
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
+    set(picotool_DIR $ENV{PICOTOOL-LOCATION})
+    include(${picotool_DIR}/picotoolConfig.cmake)
+    include(${picotool_DIR}/picotoolConfigVersion.cmake)
 endif()
+
+#commented out; will just picotool.exe directly instead of pico-sdk-tools 
+#if(WIN32)
+#    set(pico-sdk-tools_DIR $ENV{PICO_SDK_TOOLS})
+#    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
+#    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
+#endif()
 
 #commented out bc doesn't point to right spot in our directory
 #set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
