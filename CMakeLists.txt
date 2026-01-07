@@ -5,7 +5,7 @@ else()
     set(USERHOME $ENV{HOME})
 endif()
 
-commented out bc already set in terminal
+#commented out bc already set in terminal
 set(PICO_SDK_PATH ${USERHOME}/.pico-sdk/sdk/1.5.1)
 set(PICO_TOOLCHAIN_PATH ${USERHOME}/.pico-sdk/toolchain/13_2_Rel1)
 if(WIN32)
