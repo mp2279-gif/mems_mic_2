@@ -17,7 +17,7 @@
 #include "usb_microphone.h"
 
 #include "analog_microphone.h"
-#include "pdm_microphone.h"
+//#include "pdm_microphone.h"
 
 void on_analog_samples_ready(void); // Forward declaration
 
