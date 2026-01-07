@@ -10,8 +10,8 @@ set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 
 if(WIN32)
     set(pico-sdk-tools_DIR $ENV{PICO_SDK_TOOLS})
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
-    include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
+    #include(${pico-sdk-tools_DIR}/pico-sdk-tools-config.cmake)
+    #include(${pico-sdk-tools_DIR}/pico-sdk-tools-config-version.cmake)
 endif()
 
 #commented out bc doesn't point to right spot in our directory
