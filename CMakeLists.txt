@@ -9,7 +9,7 @@ endif()
 set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
 
 if(WIN32)
-    set(picotool_DIR $ENV{PICOTOOL-LOCAT})
+    set(picotool_DIR $ENV{PICOTOOLREF})
     include(${picotool_DIR}/picotoolConfig.cmake)
     include(${picotool_DIR}/picotoolConfigVersion.cmake)
 endif()
