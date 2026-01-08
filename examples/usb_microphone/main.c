@@ -16,12 +16,6 @@
 
 #include "usb_microphone.h"
 
-#define RING_BUFFER_SAMPLES (SAMPLE_BUFFER_SIZE * 4)
-
-static int16_t ring_buffer[RING_BUFFER_SAMPLES];
-static volatile uint32_t rb_write = 0;
-static volatile uint32_t rb_read  = 0;
-
 //#include "analog_microphone.h"
 //#include "pdm_microphone.h"
 
@@ -64,23 +58,9 @@ int main(void)
 
 void on_analog_samples_ready()
 {
-    int16_t temp[SAMPLE_BUFFER_SIZE];
-
-    analog_microphone_read(temp, SAMPLE_BUFFER_SIZE);
-
-    for (int i = 0; i < SAMPLE_BUFFER_SIZE; i++)
-    {
-        // Convert ADC → signed PCM16
-        int16_t pcm = ((int16_t)temp[i] - 2048) << 4;
-
-        uint32_t next = (rb_write + 1) % RING_BUFFER_SAMPLES;
-
-        // Drop sample if buffer full (prevents overwrite)
-        if (next != rb_read) {
-            ring_buffer[rb_write] = pcm;
-            rb_write = next;
-        }
-    }
+    // callback from library when all the samples in the library
+    // internal sample buffer are ready for reading 
+    analog_microphone_read(sample_buffer, SAMPLE_BUFFER_SIZE);
 }
 
 /*
@@ -103,18 +83,11 @@ void on_analog_samples_ready()
 
 void on_usb_microphone_tx_ready()
 {
-    if (!audio_streaming_active) {
-        return;
-    }
-
-    static uint8_t usb_buf[CFG_TUD_AUDIO_EP_SZ_IN];
-    usb_buf[0] = 0x00;
-
-    int16_t *pcm = (int16_t *)&usb_buf[1];
-
-    for (int i = 0; i < SAMPLE_BUFFER_SIZE; i++) {
-        pcm[i] = ring_buffer_read_or_zero();
-    }
-
-    usb_microphone_write(usb_buf, CFG_TUD_AUDIO_EP_SZ_IN);
+  // Callback from TinyUSB library when all data is ready
+  // to be transmitted.
+  //
+  // Write local buffer to the USB microphone
+  usb_microphone_write(sample_buffer, (SAMPLE_BUFFER_SIZE * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX));
+    
+  //usb_microphone_write(sample_buffer, sizeof(sample_buffer));
 }
