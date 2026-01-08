@@ -5,7 +5,7 @@
  * 
  * This examples creates a USB Microphone device using the TinyUSB
  * library and captures data from a PDM microphone using a sample
- * rate of 48 kHz, to be sent the to PC.
+ * rate of 16 kHz, to be sent the to PC.
  * 
  * The USB microphone code is based on the TinyUSB audio_test example.
  * 
@@ -25,8 +25,8 @@ void on_analog_samples_ready(void); // Forward declaration
 const struct analog_microphone_config config = {
     .gpio = 26,              // ADC-compatible GPIO (26-28)
     .bias_voltage = 1.25,    // Adjust based on your mic (MAX9814 typically 1.25V)
-    .sample_rate = 48000,    // 48 kHz
-    .sample_buffer_size = 48 //48 kHz times 1 ms USB frame
+    .sample_rate = 16000,    // 16 kHz
+    .sample_buffer_size = 16 //16 kHz times 1 ms USB frame
 };
 
 // variables
