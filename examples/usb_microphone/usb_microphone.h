@@ -8,31 +8,17 @@
 #ifndef _USB_MICROPHONE_H_
 #define _USB_MICROPHONE_H_
 
-#include "tusb.h" //part of TinyUSB
-//#include "tusb_config.h"
+#include "tusb.h"
 
 #ifndef SAMPLE_RATE
-#define SAMPLE_RATE (16000) //16 kHz
+#define SAMPLE_RATE (48000) //48 kHz
 //#define SAMPLE_RATE ((CFG_TUD_AUDIO_EP_SZ_IN / 2) - 1) * 1000
 #endif
 
-//#ifndef SAMPLE_BUFFER_SIZE //this confuses ADC buffer with sample buffer size aka how many samples you read vs how many samples you send
-//#define SAMPLE_BUFFER_SIZE (CFG_TUD_AUDIO_EP_SZ_IN / CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX)
-//#define SAMPLE_BUFFER_SIZE ((CFG_TUD_AUDIO_EP_SZ_IN/2) - 1)
-//#endif
-
-#ifndef USB_AUDIO_SAMPLES_PER_FRAME
-#define USB_AUDIO_SAMPLES_PER_FRAME    16
-#endif
-
-#ifndef USB_AUDIO_BYTES_PER_FRAME
-#define USB_AUDIO_BYTES_PER_FRAME      96
-#endif
-
 #ifndef SAMPLE_BUFFER_SIZE
-#define SAMPLE_BUFFER_SIZE USB_AUDIO_SAMPLES_PER_FRAME
-#endif  
-
+#define SAMPLE_BUFFER_SIZE (CFG_TUD_AUDIO_EP_SZ_IN / CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX)
+//#define SAMPLE_BUFFER_SIZE ((CFG_TUD_AUDIO_EP_SZ_IN/2) - 1)
+#endif
 
 typedef void (*usb_microphone_tx_ready_handler_t)(void);
 
