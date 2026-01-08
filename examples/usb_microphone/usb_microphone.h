@@ -8,7 +8,8 @@
 #ifndef _USB_MICROPHONE_H_
 #define _USB_MICROPHONE_H_
 
-#include "tusb.h"
+//#include "tusb.h"
+#include "tusb_config.h"
 
 #ifndef SAMPLE_RATE
 #define SAMPLE_RATE (48000) //48 kHz
