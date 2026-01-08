@@ -24,7 +24,7 @@
  */
 
 #include "usb_microphone.h"
-
+#include "usb_descriptors.h"
 // Audio controls
 // Current states
 bool mute[CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX + 1]; 						// +1 for master channel 0
