@@ -29,6 +29,10 @@
 #define USB_AUDIO_BYTES_PER_FRAME      96
 #endif
 
+#ifndef SAMPLE_BUFFER_SIZE
+#define SAMPLE_BUFFER_SIZE USB_AUDIO_SAMPLES_PER_FRAME
+#endif  
+
 
 typedef void (*usb_microphone_tx_ready_handler_t)(void);
 
