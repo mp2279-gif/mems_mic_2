@@ -26,7 +26,7 @@ const struct analog_microphone_config config = {
     .gpio = 26,              // ADC-compatible GPIO (26-28)
     .bias_voltage = 1.25,    // Adjust based on your mic (MAX9814 typically 1.25V)
     .sample_rate = 48000,    // 48 kHz
-    .sample_buffer_size = SAMPLE_BUFFER_SIZE
+    .sample_buffer_size = 48 //48 kHz times 1 ms USB frame
 };
 
 // variables
