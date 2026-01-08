@@ -16,6 +16,12 @@
 
 #include "usb_microphone.h"
 
+#define RING_BUFFER_SAMPLES (SAMPLE_BUFFER_SIZE * 4)
+
+static int16_t ring_buffer[RING_BUFFER_SAMPLES];
+static volatile uint32_t rb_write = 0;
+static volatile uint32_t rb_read  = 0;
+
 //#include "analog_microphone.h"
 //#include "pdm_microphone.h"
 
@@ -58,14 +64,22 @@ int main(void)
 
 void on_analog_samples_ready()
 {
-    // callback from library when all the samples in the library
-    // internal sample buffer are ready for reading 
-    analog_microphone_read(sample_buffer, SAMPLE_BUFFER_SIZE);
+    int16_t temp[SAMPLE_BUFFER_SIZE];
 
-     // Convert ADC samples to signed 16-bit PCM
+    analog_microphone_read(temp, SAMPLE_BUFFER_SIZE);
+
     for (int i = 0; i < SAMPLE_BUFFER_SIZE; i++)
     {
-        sample_buffer[i] = ((int16_t)sample_buffer[i] - 2048) << 4;
+        // Convert ADC → signed PCM16
+        int16_t pcm = ((int16_t)temp[i] - 2048) << 4;
+
+        uint32_t next = (rb_write + 1) % RING_BUFFER_SAMPLES;
+
+        // Drop sample if buffer full (prevents overwrite)
+        if (next != rb_read) {
+            ring_buffer[rb_write] = pcm;
+            rb_write = next;
+        }
     }
 }
 
@@ -89,12 +103,34 @@ void on_analog_samples_ready()
 
 void on_usb_microphone_tx_ready()
 {
-  // Callback from TinyUSB library when all data is ready
-  // to be transmitted.
-  //
-  // Write local buffer to the USB microphone
-  usb_microphone_write(sample_buffer, (SAMPLE_BUFFER_SIZE * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX));
-    
-  //usb_microphone_write(sample_buffer, sizeof(sample_buffer));
+    static uint8_t usb_buf[CFG_TUD_AUDIO_EP_SZ_IN];
+
+    usb_buf[0] = 0x00; // UAC2 header
+
+    int16_t *pcm = (int16_t *)&usb_buf[1];
+
+    uint32_t available =
+        (rb_write >= rb_read)
+        ? (rb_write - rb_read)
+        : (RING_BUFFER_SAMPLES - rb_read + rb_write);
+
+    uint32_t needed = SAMPLE_BUFFER_SIZE;
+
+    for (uint32_t i = 0; i < needed; i++)
+    {
+        if (available > 0)
+        {
+            pcm[i] = ring_buffer[rb_read];
+            rb_read = (rb_read + 1) % RING_BUFFER_SAMPLES;
+            available--;
+        }
+        else
+        {
+            pcm[i] = 0; // underrun → silence
+        }
+    }
+
+    usb_microphone_write(usb_buf, CFG_TUD_AUDIO_EP_SZ_IN);
 }
+
 
