@@ -96,21 +96,37 @@ bool tud_audio_set_req_ep_cb(uint8_t rhport, tusb_control_request_t const * p_re
 // Invoked when audio class specific set request received for an interface
 bool tud_audio_set_req_itf_cb(uint8_t rhport, tusb_control_request_t const * p_request, uint8_t *pBuff)
 {
-  (void) rhport;
   (void) pBuff;
 
-  // We do not support any set range requests here, only current value requests
-  TU_VERIFY(p_request->bRequest == AUDIO_CS_REQ_CUR);
+  // Handle ALT setting changes (SET_INTERFACE)
+  if (p_request->bRequest == TUSB_REQ_SET_INTERFACE)
+  {
+    uint8_t itf = TU_U16_LOW(p_request->wIndex);
+    uint8_t alt = TU_U16_LOW(p_request->wValue);
 
-  // Page 91 in UAC2 specification
-  uint8_t channelNum = TU_U16_LOW(p_request->wValue);
-  uint8_t ctrlSel = TU_U16_HIGH(p_request->wValue);
-  uint8_t itf = TU_U16_LOW(p_request->wIndex);
+    if (itf == ITF_NUM_AUDIO_STREAMING)
+    {
+      audio_streaming_active = (alt == 1); // Start/Stop streaming
+    }
 
-  (void) channelNum; (void) ctrlSel; (void) itf;
+    return true; // handled
+  }
 
-  return false; 	// Yet not implemented
+  // For other interface set requests, handle UAC2 CUR controls
+  if (p_request->bRequest == AUDIO_CS_REQ_CUR)
+  {
+    uint8_t channelNum = TU_U16_LOW(p_request->wValue);
+    uint8_t ctrlSel = TU_U16_HIGH(p_request->wValue);
+    uint8_t itf = TU_U16_LOW(p_request->wIndex);
+
+    (void) channelNum; (void) ctrlSel; (void) itf;
+
+    return false; // not implemented yet
+  }
+
+  return false;
 }
+
 
 // Invoked when audio class specific set request received for an entity
 bool tud_audio_set_req_entity_cb(uint8_t rhport, tusb_control_request_t const * p_request, uint8_t *pBuff)
