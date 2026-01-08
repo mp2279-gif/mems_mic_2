@@ -61,6 +61,12 @@ void on_analog_samples_ready()
     // callback from library when all the samples in the library
     // internal sample buffer are ready for reading 
     analog_microphone_read(sample_buffer, SAMPLE_BUFFER_SIZE);
+
+     // Convert ADC samples to signed 16-bit PCM
+    for (int i = 0; i < SAMPLE_BUFFER_SIZE; i++)
+    {
+        sample_buffer[i] = ((int16_t)sample_buffer[i] - 2048) << 4;
+    }
 }
 
 /*
