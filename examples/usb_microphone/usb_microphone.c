@@ -32,6 +32,8 @@ uint16_t volume[CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX + 1]; 					// +1 for master c
 uint32_t sampFreq;
 uint8_t clkValid;
 
+static volatile bool audio_streaming_active = false;
+
 // Range states
 audio_control_range_2_n_t(1) volumeRng[CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX+1]; 			// Volume range state
 audio_control_range_4_n_t(1) sampleFreqRng; 						// Sample frequency range state
@@ -333,6 +335,20 @@ bool tud_audio_set_itf_close_EP_cb(uint8_t rhport, tusb_control_request_t const 
 {
   (void) rhport;
   (void) p_request;
+
+  return true;
+}
+
+bool tud_audio_set_itf_cb(uint8_t rhport,
+                          uint8_t itf,
+                          uint8_t alt)
+{
+  (void)rhport;
+
+  if (itf == ITF_NUM_AUDIO_STREAMING)
+  {
+    audio_streaming_active = (alt == 1);
+  }
 
   return true;
 }
