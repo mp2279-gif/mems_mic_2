@@ -105,8 +105,8 @@ extern "C" {
 //#define CFG_TUD_AUDIO_EP_SZ_IN ((48 + 1) * 2 * 1)
 #define CFG_TUD_AUDIO_EP_SZ_IN ((48) * 2 * 1)      //48 samples times 2 bytes times 1 channel = 96 bytes                                                            // 48 kHz
 #define CFG_TUD_AUDIO_FUNC_1_EP_IN_SZ_MAX                             CFG_TUD_AUDIO_EP_SZ_IN                  // Maximum EP IN size for all AS alternate settings used
-//#define CFG_TUD_AUDIO_FUNC_1_EP_IN_SW_BUF_SZ                          CFG_TUD_AUDIO_EP_SZ_IN
-#define CFG_TUD_AUDIO_FUNC_1_EP_IN_SW_BUF_SZ                          CFG_TUD_AUDIO_EP_SZ_IN * 2 //avoid gaps in streaming - queue 2 frames of audio instead of just 1
+#define CFG_TUD_AUDIO_FUNC_1_EP_IN_SW_BUF_SZ                          CFG_TUD_AUDIO_EP_SZ_IN
+//#define CFG_TUD_AUDIO_FUNC_1_EP_IN_SW_BUF_SZ                          CFG_TUD_AUDIO_EP_SZ_IN * 2 //avoid gaps in streaming - queue 2 frames of audio instead of just 1
 
 #ifdef __cplusplus
 }
