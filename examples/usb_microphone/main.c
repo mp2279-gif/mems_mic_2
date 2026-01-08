@@ -87,7 +87,7 @@ void on_usb_microphone_tx_ready()
   // to be transmitted.
   //
   // Write local buffer to the USB microphone
-  usb_microphone_write(sample_buffer, (SAMPLE_BUFFER_SIZE * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX));
-    
+  //usb_microphone_write(sample_buffer, (SAMPLE_BUFFER_SIZE * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX));
+  usb_microphone_write(sample_buffer, USB_AUDIO_BYTES_PER_FRAME); //updated 1/8
   //usb_microphone_write(sample_buffer, sizeof(sample_buffer));
 }
