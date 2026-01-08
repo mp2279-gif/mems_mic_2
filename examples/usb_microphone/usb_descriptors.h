@@ -1,0 +1,8 @@
+#pragma once
+
+enum
+{
+  ITF_NUM_AUDIO_CONTROL = 0,
+  ITF_NUM_AUDIO_STREAMING,
+  ITF_NUM_TOTAL
+};
