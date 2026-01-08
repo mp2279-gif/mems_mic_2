@@ -24,15 +24,13 @@
  */
 
 #include "usb_microphone.h"
-#include "usb_descriptors.h"
+
 // Audio controls
 // Current states
 bool mute[CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX + 1]; 						// +1 for master channel 0
 uint16_t volume[CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX + 1]; 					// +1 for master channel 0
 uint32_t sampFreq;
 uint8_t clkValid;
-
-static volatile bool audio_streaming_active = false;
 
 // Range states
 audio_control_range_2_n_t(1) volumeRng[CFG_TUD_AUDIO_FUNC_1_N_CHANNELS_TX+1]; 			// Volume range state
@@ -96,37 +94,21 @@ bool tud_audio_set_req_ep_cb(uint8_t rhport, tusb_control_request_t const * p_re
 // Invoked when audio class specific set request received for an interface
 bool tud_audio_set_req_itf_cb(uint8_t rhport, tusb_control_request_t const * p_request, uint8_t *pBuff)
 {
+  (void) rhport;
   (void) pBuff;
 
-  // Handle ALT setting changes (SET_INTERFACE)
-  if (p_request->bRequest == TUSB_REQ_SET_INTERFACE)
-  {
-    uint8_t itf = TU_U16_LOW(p_request->wIndex);
-    uint8_t alt = TU_U16_LOW(p_request->wValue);
+  // We do not support any set range requests here, only current value requests
+  TU_VERIFY(p_request->bRequest == AUDIO_CS_REQ_CUR);
 
-    if (itf == ITF_NUM_AUDIO_STREAMING)
-    {
-      audio_streaming_active = (alt == 1); // Start/Stop streaming
-    }
+  // Page 91 in UAC2 specification
+  uint8_t channelNum = TU_U16_LOW(p_request->wValue);
+  uint8_t ctrlSel = TU_U16_HIGH(p_request->wValue);
+  uint8_t itf = TU_U16_LOW(p_request->wIndex);
 
-    return true; // handled
-  }
+  (void) channelNum; (void) ctrlSel; (void) itf;
 
-  // For other interface set requests, handle UAC2 CUR controls
-  if (p_request->bRequest == AUDIO_CS_REQ_CUR)
-  {
-    uint8_t channelNum = TU_U16_LOW(p_request->wValue);
-    uint8_t ctrlSel = TU_U16_HIGH(p_request->wValue);
-    uint8_t itf = TU_U16_LOW(p_request->wIndex);
-
-    (void) channelNum; (void) ctrlSel; (void) itf;
-
-    return false; // not implemented yet
-  }
-
-  return false;
+  return false; 	// Yet not implemented
 }
-
 
 // Invoked when audio class specific set request received for an entity
 bool tud_audio_set_req_entity_cb(uint8_t rhport, tusb_control_request_t const * p_request, uint8_t *pBuff)
@@ -354,4 +336,3 @@ bool tud_audio_set_itf_close_EP_cb(uint8_t rhport, tusb_control_request_t const 
 
   return true;
 }
-
