@@ -103,34 +103,18 @@ void on_analog_samples_ready()
 
 void on_usb_microphone_tx_ready()
 {
-    static uint8_t usb_buf[CFG_TUD_AUDIO_EP_SZ_IN];
+    if (!audio_streaming_active) {
+        return;
+    }
 
-    usb_buf[0] = 0x00; // UAC2 header
+    static uint8_t usb_buf[CFG_TUD_AUDIO_EP_SZ_IN];
+    usb_buf[0] = 0x00;
 
     int16_t *pcm = (int16_t *)&usb_buf[1];
 
-    uint32_t available =
-        (rb_write >= rb_read)
-        ? (rb_write - rb_read)
-        : (RING_BUFFER_SAMPLES - rb_read + rb_write);
-
-    uint32_t needed = SAMPLE_BUFFER_SIZE;
-
-    for (uint32_t i = 0; i < needed; i++)
-    {
-        if (available > 0)
-        {
-            pcm[i] = ring_buffer[rb_read];
-            rb_read = (rb_read + 1) % RING_BUFFER_SAMPLES;
-            available--;
-        }
-        else
-        {
-            pcm[i] = 0; // underrun → silence
-        }
+    for (int i = 0; i < SAMPLE_BUFFER_SIZE; i++) {
+        pcm[i] = ring_buffer_read_or_zero();
     }
 
     usb_microphone_write(usb_buf, CFG_TUD_AUDIO_EP_SZ_IN);
 }
-
-
