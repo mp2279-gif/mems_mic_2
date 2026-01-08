@@ -339,16 +339,29 @@ bool tud_audio_set_itf_close_EP_cb(uint8_t rhport, tusb_control_request_t const 
   return true;
 }
 
-bool tud_audio_set_itf_cb(uint8_t rhport,
-                          uint8_t itf,
-                          uint8_t alt)
+bool tud_audio_set_req_itf_cb(uint8_t rhport,
+                             tusb_control_request_t const * p_request,
+                             uint8_t *pBuff)
 {
-  (void)rhport;
+  (void) rhport;
+  (void) pBuff;
 
-  if (itf == ITF_NUM_AUDIO_STREAMING)
+  // We only care about SET_INTERFACE
+  if (p_request->bRequest == TUSB_REQ_SET_INTERFACE)
   {
-    audio_streaming_active = (alt == 1);
+    uint8_t itf = TU_U16_LOW(p_request->wIndex);
+    uint8_t alt = TU_U16_LOW(p_request->wValue);
+
+    if (itf == ITF_NUM_AUDIO_STREAMING)
+    {
+      audio_streaming_active = (alt == 1);
+    }
+
+    return true;
   }
 
-  return true;
+  // Keep existing behavior for audio class requests
+  TU_VERIFY(p_request->bRequest == AUDIO_CS_REQ_CUR);
+
+  return false;
 }
