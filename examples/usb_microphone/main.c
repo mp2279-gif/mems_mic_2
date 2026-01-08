@@ -25,14 +25,13 @@ void on_analog_samples_ready(void); // Forward declaration
 const struct analog_microphone_config config = {
     .gpio = 26,              // ADC-compatible GPIO (26-28)
     .bias_voltage = 1.25,    // Adjust based on your mic (MAX9814 typically 1.25V)
-    .sample_rate = 16000,    // 16 kHz
-    .sample_buffer_size = 16 //16 kHz times 1 ms USB frame
+    .sample_rate = 48000,    // 48 kHz
+    .sample_buffer_size = SAMPLE_BUFFER_SIZE
 };
 
 // variables
 //uint16_t sample_buffer[SAMPLE_BUFFER_SIZE];
-//__attribute__((aligned(4))) uint16_t sample_buffer[SAMPLE_BUFFER_SIZE];
-__attribute__((aligned(4))) int16_t sample_buffer[SAMPLE_BUFFER_SIZE];
+__attribute__((aligned(4))) uint16_t sample_buffer[SAMPLE_BUFFER_SIZE];
 
 // callback functions
 //void on_pdm_samples_ready();
@@ -88,7 +87,8 @@ void on_usb_microphone_tx_ready()
   // to be transmitted.
   //
   // Write local buffer to the USB microphone
-  //usb_microphone_write(sample_buffer, (SAMPLE_BUFFER_SIZE * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX));
-  usb_microphone_write(sample_buffer, USB_AUDIO_BYTES_PER_FRAME); //updated 1/8
+  usb_microphone_write(sample_buffer, (SAMPLE_BUFFER_SIZE * CFG_TUD_AUDIO_FUNC_1_N_BYTES_PER_SAMPLE_TX));
+    
   //usb_microphone_write(sample_buffer, sizeof(sample_buffer));
 }
+
