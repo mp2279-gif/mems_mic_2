@@ -29,13 +29,13 @@ struct analog_microphone_config {
 };
 
 
-typedef unsigned int uint; 
-struct analog_microphone_config {
-    uint gpio;
-    float bias_voltage;
-    uint sample_rate;
-    uint sample_buffer_size;
-};
+/*typedef unsigned int uint; 
+*struct analog_microphone_config {
+*    uint gpio;
+*    float bias_voltage;
+*    uint sample_rate;
+*    uint sample_buffer_size;
+*};
  
 int analog_microphone_init(const struct analog_microphone_config* config);
 void analog_microphone_deinit();
