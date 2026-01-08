@@ -5,7 +5,7 @@
  * 
  * This examples creates a USB Microphone device using the TinyUSB
  * library and captures data from a PDM microphone using a sample
- * rate of 16 kHz, to be sent the to PC.
+ * rate of 48 kHz, to be sent the to PC.
  * 
  * The USB microphone code is based on the TinyUSB audio_test example.
  * 
