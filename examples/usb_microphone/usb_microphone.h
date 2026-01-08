@@ -12,7 +12,7 @@
 //#include "tusb_config.h"
 
 #ifndef SAMPLE_RATE
-#define SAMPLE_RATE (48000) //48 kHz
+#define SAMPLE_RATE (16000) //16 kHz
 //#define SAMPLE_RATE ((CFG_TUD_AUDIO_EP_SZ_IN / 2) - 1) * 1000
 #endif
 
@@ -22,7 +22,7 @@
 //#endif
 
 #ifndef USB_AUDIO_SAMPLES_PER_FRAME
-#define USB_AUDIO_SAMPLES_PER_FRAME    48
+#define USB_AUDIO_SAMPLES_PER_FRAME    16
 #endif
 
 #ifndef USB_AUDIO_BYTES_PER_FRAME
